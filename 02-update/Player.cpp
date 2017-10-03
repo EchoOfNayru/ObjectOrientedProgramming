@@ -1,7 +1,25 @@
 #include "Player.h"
 #include "sfwdraw.h"
 #include <iostream>
-void Player::update()
+#include <stdio.h>
+#include <math.h>
+
+float Distance(float x1, float y1, float x2, float y2)
+{
+	return sqrt(((x1 - x2)*(x1 - x2)) + ((y1 - y2)*(y1 - y2)));
+}
+
+void ApplyForce(Player& one)
+{
+	one.x += one.speed;
+}
+
+void ApplyForce2(Player2& two) 
+{
+	two.x += two.speed;
+}
+
+void Player::update(Player& one, Player2& two)
 {
 	if (sfw::getKey('W') && size < 30)
 	{
@@ -34,11 +52,11 @@ void Player::update()
 	}
 	if (sfw::getKey('A'))
 	{
-		x -= 5;
+		one.speed = -5;
 	}
 	if (sfw::getKey('D'))
 	{
-		x += 5;
+		one.speed = 5;
 	}
 	if (gravity == 0 && y < 30)
 	{
@@ -51,7 +69,25 @@ void Player::update()
 	if (slamTimer > 0)
 	{
 		slamTimer--;
+		if (slamTimer == 0)
+		{
+			gravity = -20;
+		}
 	}
+
+	//collision with other player
+	if (Distance(one.x, one.y, two.x, two.y) < one.size + two.size)
+	{
+		one.speed *= -1;
+		ApplyForce(one);
+	}
+	else
+	{
+		ApplyForce(one);
+	}
+
+	one.speed = 0;
+	std::cout << one.x << "  " << one.y << std::endl;
 }
 
 void Player::draw()
@@ -59,8 +95,9 @@ void Player::draw()
 	sfw::drawCircle(x, y, size);
 }
 
-void Player2::update()
+void Player2::update(Player& one, Player2& two)
 {
+	//gravity and slam
 	if (sfw::getKey('I') && size < 30)
 	{
 		if (gravity == 0)
@@ -92,11 +129,11 @@ void Player2::update()
 	}
 	if (sfw::getKey('J'))
 	{
-		x -= 5;
+		two.speed = -5;
 	}
 	if (sfw::getKey('L'))
 	{
-		x += 5;
+		two.speed = 5;
 	}
 	if (gravity == 0 && y < 30)
 	{
@@ -109,10 +146,28 @@ void Player2::update()
 	if (slamTimer > 0)
 	{
 		slamTimer--;
+		if (slamTimer == 0)
+		{
+			gravity = -20;
+		}
 	}
+
+	//collision with other player
+	if (Distance(one.x, one.y, two.x, two.y) < one.size + two.size) 
+	{
+		two.speed *= -1;
+		ApplyForce2(two);
+	}
+	else
+	{
+		ApplyForce2(two);
+	}
+
+	two.speed = 0;
 }
 
 void Player2::draw()
 {
+	printf("%f\n", speed);
 	sfw::drawCircle(x, y, size, 12, 0x800000FF);
 }

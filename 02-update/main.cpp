@@ -14,18 +14,20 @@ int main()
 	Player2 you;
 
 	me.x = 400;
-	me.y = 26;
-	you.x = 450;
-	you.y = 26;
+	me.y = 25.1;
+	you.x = 750;
+	you.y = 25.1;
 	me.size = 25;
 	you.size = 25;
+	me.speed = 0;
+	you.speed = 0;
 
 	//game loop
 	while (sfw::stepContext()) 
 	{
-		me.update();
+		me.update(me, you);
 		me.draw();
-		you.update();
+		you.update(me, you);
 		you.draw();
 	}
 
