@@ -11,7 +11,15 @@ int main()
 	sfw::setBackgroundColor(NONE);
 
 	Player me;
-	Player2 you;
+	Player you;
+	me.color = MAGENTA;
+	you.color = CYAN;
+
+
+	me.colForce = 10;
+	you.colForce = 10;
+	me.launchforce = 0;
+	you.launchforce = 0;
 
 	me.x = 400;
 	me.y = 25.1;
@@ -22,13 +30,25 @@ int main()
 	me.speed = 0;
 	you.speed = 0;
 
+	me.upKey = 'W';
+	me.downKey = 'S';
+	me.leftKey = 'A';
+	me.rightKey = 'D';
+	
+	you.upKey = 'I';
+	you.downKey = 'K';
+	you.leftKey = 'J';
+	you.rightKey = 'L';
+
 	//game loop
 	while (sfw::stepContext()) 
 	{
 		me.update(me, you);
 		me.draw();
-		you.update(me, you);
+		you.update(you, me);
 		you.draw();
+
+		//sfw::drawLine(me.x, me.y, you.x, you.y, RED);
 	}
 
 	//clean up
