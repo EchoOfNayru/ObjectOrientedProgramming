@@ -15,6 +15,8 @@ public:
 	float currentJumps = 0;
 	float totalJumps = 2;
 	
+	int points;
+	
 
 	// player specific settings
 	unsigned int upKey;
